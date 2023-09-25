@@ -1,23 +1,24 @@
-import React, { useContext, useRef, useState, } from 'react';
+import React, {useRef, useState} from 'react';
 import classes from '../style/signup.module.css';
-import Authcontext from '../store/authContext';
+import { Link } from 'react-router-dom';
 
 function SignupForm() {
   const emailinputRef = useRef();
   const passwordinputRef= useRef();
-  const authCtx = useContext(Authcontext);
-  const [isLogin, setisLogin] = useState(true);
-   
-  const switchHandler = () => {
-    setisLogin((prevstate) => !prevstate)
-}
+  const confirmPasswordInputRef = useRef();
 
 const handleSubmit = (event) => {
   event.preventDefault();
   const email = emailinputRef.current.value;
   const password = passwordinputRef.current.value;
-    const url = isLogin ?
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw' :
+  const confirmPassword = confirmPasswordInputRef.current.value;
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+  
+    const url = 
       'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
     fetch(url, {
       method: 'POST',
@@ -32,6 +33,7 @@ const handleSubmit = (event) => {
     })
       .then((res) => {
         if (res.ok) {
+          window.location.href = '/login'; 
           return res.json();
         } else {
           return res.json().then((data) => {
@@ -41,19 +43,15 @@ const handleSubmit = (event) => {
           });
         }
       })
-      .then((data) => {
-        if (isLogin) {
-          authCtx.login(data.idToken, data.email);
-        }
-      })
-      
       .catch((err) => {
         alert(err.message)
       });
+
   };
+  
   return (
     <div className={classes.contactContainer}>
-      <h1 className={classes.title} >{isLogin ? "sign up" : "login"}</h1>
+      <h1 className={classes.title} >sign up</h1>
       <form  className={classes.form} onSubmit={handleSubmit}>
         <div>
           <label className={classes.label} htmlFor="email">Email:</label>
@@ -71,25 +69,28 @@ const handleSubmit = (event) => {
             type="password"
             id="password"
             name="password"
-            
             required ref={passwordinputRef}
           />
         </div>
         <div>
-        <label className={classes.label} htmlFor="confirmpassword">Confirm Password:</label>
-          <input className={classes.input}
+        <label className={classes.label} htmlFor="confirmPassword">
+            Confirm Password:
+        </label>
+        <input
+            className={classes.input}
             type="password"
-            id="confirmpassword"
-            name="confirmpassword"
-            required ref={emailinputRef}
-          />
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            ref={confirmPasswordInputRef}
+        />
         </div>
         <div className={classes.but}>
         <button  type="submit" className={classes.submitButton}>
-            {isLogin? 'create account' : 'login'}</button>
+            sign up</button>
         <div>
-          <button className={classes.submitButton} type="button" onClick={switchHandler}>
-            {isLogin? 'login with existing account' : 'create account'}</button>
+          <button className={classes.text} type='button'>
+            Already have an account?<Link to ='/login'>login</Link></button>
         </div>
         </div>
       </form>
