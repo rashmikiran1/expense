@@ -19,7 +19,7 @@ function Login() {
     const password = passwordInputRef.current.value;
 
     const url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=YOUR_API_KEY'; // Replace with your API key
+      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
 
     fetch(url, {
       method: 'POST',
