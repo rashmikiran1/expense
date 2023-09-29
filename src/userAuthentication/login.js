@@ -1,11 +1,14 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useContext} from 'react';
 import classes from '../style/signup.module.css';
 import { Link } from 'react-router-dom';
+import AuthContext from '../store/authContext';
 
 function Login() {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const authCtx = useContext(AuthContext);
+  const [isLogin, setisLogin] = useState(true);
 
   const togglePasswordVisibility = () => {
     setPasswordVisible((prevVisible) => !prevVisible);
@@ -18,8 +21,9 @@ function Login() {
     const email = emailInputRef.current.value;
     const password = passwordInputRef.current.value;
 
-    const url =
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
+    const url = isLogin ?
+    'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw' :
+    'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
 
     fetch(url, {
       method: 'POST',
@@ -42,6 +46,11 @@ function Login() {
             console.error('API Error:', data.error);
             throw new Error(errorMessage);
           });
+        }
+      })
+      .then((data) => {
+        if(isLogin) {
+          authCtx.login(data.idToken, data.email);
         }
       })
       .catch((err) => {

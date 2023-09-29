@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import classes from '../style/signup.module.css';
 import { Link } from 'react-router-dom';
 
@@ -18,8 +18,8 @@ const handleSubmit = (event) => {
     return;
   }
   
-    const url = 
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
+  const url =
+  'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCGIlzbT0foDEl35J3c9DtKR1fC7K_Tkaw';
     fetch(url, {
       method: 'POST',
       body: JSON.stringify({
