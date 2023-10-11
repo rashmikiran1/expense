@@ -1,5 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import AuthContext from '../store/authContext';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   const [fullName, setFullName] = useState('');
@@ -53,7 +54,10 @@ function Profile() {
 
   return (
     <div>
+      <div>
       <h2>Complete Your Profile</h2>
+      <button><Link to="/login">Logout</Link></button>
+      </div>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="fullName">Full Name:</label>
