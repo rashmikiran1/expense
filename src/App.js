@@ -5,6 +5,7 @@ import Login from "./userAuthentication/login";
 import Profile from "./components/home";
 import ViewProfile from "./userAuthentication/updateProfile";
 import ForgetPassword from "./userAuthentication/forgetpassword";
+import ExpenseTracker from "./components/expenses";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/home" element={<Profile />} />
         <Route path="/update" element={<ViewProfile />} />
         <Route path="/forgetpassword" element={<ForgetPassword />} />
+        <Route path="/expenses" element={<ExpenseTracker />} />
       </Routes>
     </Router>
   );

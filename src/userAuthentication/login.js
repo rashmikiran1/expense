@@ -38,7 +38,7 @@ function Login() {
     })
       .then((res) => {
         if (res.ok) {
-          window.location.href = '/home';
+          window.location.href = '/expenses';
           return res.json();
         } else {
           return res.json().then((data) => {
