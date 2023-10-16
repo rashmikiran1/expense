@@ -99,6 +99,9 @@ function Login() {
           </div>
         </div>
         <div className={classes.but}>
+        <button type="button" className={classes.forget}>
+          <Link to ="/forgetpassword">  Forget Password ?</Link>
+          </button>
           <button type="submit" className={classes.submitButton}>
             Login
           </button>
