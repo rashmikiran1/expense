@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ExpenseTracker = () => {
   const [expense, setExpense] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Select Category');
   const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = [
     'Food',
@@ -19,19 +20,56 @@ const ExpenseTracker = () => {
 
   const handleAddExpense = () => {
     if (expense.trim() !== '' && description.trim() !== '' && category !== 'Select Category') {
-      setExpenses([
-        ...expenses,
-        {
-          expense,
-          description,
-          category,
+      const newExpense = {
+        expense,
+        description,
+        category,
+      };
+
+      // Send the data to a server using the fetch API with POST
+      fetch('https://ecommerce-ad7ec-default-rtdb.firebaseio.com/Expense.json', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-      ]);
-      setExpense('');
-      setDescription('');
-      setCategory('Select Category');
+        body: JSON.stringify(newExpense),
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Failed to add expense');
+          }
+        })
+        .then(() => {
+          setExpense('');
+          setDescription('');
+          setCategory('Select Category');
+          console.log('Expense added to the server');
+        })
+        .catch((error) => {
+          console.error('Error adding expense:', error);
+        });
     }
   };
+
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        const response = await fetch('https://ecommerce-ad7ec-default-rtdb.firebaseio.com/Expense.json');
+        const data = await response.json();
+        if (data) {
+          const Array = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+          setExpenses(Array);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Error fetching movies:', error);
+      }
+    }
+
+    fetchExpenses();
+  }, []);
 
   return (
     <div>
@@ -66,15 +104,19 @@ const ExpenseTracker = () => {
       </div>
       <div>
         <h2>Expenses:</h2>
-        <ul>
-          {expenses.map((item, index) => (
-            <li key={index}>
-              <strong>Expense:</strong> {item.expense},&nbsp;
-              <strong>Description:</strong> {item.description},&nbsp;
-              <strong>Category:</strong> {item.category}
-            </li>
-          ))}
-        </ul>
+        {loading ? (
+          <p>Loading expenses...</p>
+        ) : (
+          <ul>
+            {expenses.map((item, index) => (
+              <li key={index}>
+                <strong>Expense:</strong> {item.expense},&nbsp;
+                <strong>Description:</strong> {item.description},&nbsp;
+                <strong>Category:</strong> {item.category}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
