@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 const ExpenseTracker = () => {
   const [expense, setExpense] = useState('');
   const [description, setDescription] = useState('');
@@ -7,7 +6,6 @@ const ExpenseTracker = () => {
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editingExpense, setEditingExpense] = useState(null);
-
 
   const categories = [
     'Food',
@@ -40,16 +38,13 @@ const ExpenseTracker = () => {
       const expenseToEdit = expenses.find((item) => item.id === id);
   
       if (expenseToEdit) {
-        // Set the edit form fields with the existing data
         setExpense(expenseToEdit.expense);
         setDescription(expenseToEdit.description);
         setCategory(expenseToEdit.category);
   
-        // Set the editingExpense state to the ID of the expense being edited
         setEditingExpense(id);
       }
     } else if (expense.trim() !== '' && description.trim() !== '' && category !== 'Select Category' && editingExpense) {
-      // Update the edited expense in the local state
       const updatedExpenses = expenses.map((item) =>
         item.id === editingExpense
           ? {
@@ -60,9 +55,7 @@ const ExpenseTracker = () => {
             }
           : item
       );
-  
-      // Update the expense in the Firebase Realtime Database
-      fetch(`https://ecommerce-ad7ec-default-rtdb.firebaseio.com/Expense/${editingExpense}.json`, {
+     fetch(`https://ecommerce-ad7ec-default-rtdb.firebaseio.com/Expense/${editingExpense}.json`, {
         method: 'PATCH', 
         headers: {
           'Content-Type': 'application/json',
@@ -75,10 +68,8 @@ const ExpenseTracker = () => {
       })
         .then((response) => {
           if (response.ok) {
-            // Successfully updated in the database, now update the local state
+            
             setExpenses(updatedExpenses);
-  
-            // Clear the edit form fields and exit edit mode
             setExpense('');
             setDescription('');
             setCategory('Select Category');
@@ -93,8 +84,6 @@ const ExpenseTracker = () => {
     }
   };
   
-  
- 
   const handleAddExpense = () => {
     if (expense.trim() !== '' && description.trim() !== '' && category !== 'Select Category') {
       const newExpense = {
@@ -198,5 +187,4 @@ const ExpenseTracker = () => {
     </div>
   );
 };
-
 export default ExpenseTracker;
