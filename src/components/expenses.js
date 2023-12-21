@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+  const categories = [import React, { useState, useEffect } from 'react';
 const ExpenseTracker = () => {
   const [expense, setExpense] = useState('');
   const [description, setDescription] = useState('');
